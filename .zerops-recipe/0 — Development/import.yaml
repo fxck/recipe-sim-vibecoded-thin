@@ -12,7 +12,8 @@ project:
 services:
   - hostname: app
     type: nodejs@22
-    buildFromGit: https://github.com/fxck/recipe-vibecoded-thin
+    zeropsSetup: dev
+    buildFromGit: https://github.com/fxck/recipe-sim-vibecoded-thin
     enableSubdomainAccess: true
     verticalAutoscaling:
       minRam: 0.25
