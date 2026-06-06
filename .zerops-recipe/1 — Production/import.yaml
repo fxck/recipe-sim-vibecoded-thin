@@ -1,0 +1,28 @@
+#zeropsPreprocessor=on
+
+# Production environment — keeps two app containers running and lets Zerops
+# scale RAM up under load. Still a single-node database, which is plenty for a
+# hobby URL shortener.
+project:
+  name: sniplink-production
+  envVariables:
+    APP_SECRET: <@generateRandomString(<32>)>
+
+services:
+  - hostname: app
+    type: nodejs@22
+    zeropsSetup: prod
+    buildFromGit: https://github.com/fxck/recipe-vibecoded-thin
+    enableSubdomainAccess: true
+    minContainers: 2
+    verticalAutoscaling:
+      minRam: 0.5
+      minFreeRamGB: 0.25
+
+  - hostname: db
+    type: postgresql@18
+    priority: 10
+    mode: NON_HA
+    verticalAutoscaling:
+      minRam: 0.25
+      minFreeRamGB: 0.25

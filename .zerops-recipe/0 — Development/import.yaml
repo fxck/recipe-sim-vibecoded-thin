@@ -1,0 +1,26 @@
+#zeropsPreprocessor=on
+
+# Development environment — a single app container plus a lightweight database.
+# Disposable: tear it down and recreate it whenever you want a clean slate.
+project:
+  name: sniplink-dev
+  envVariables:
+    # Signing secret for short-code tokens. Machine-generated, so it never has
+    # to be entered by a human — the recipe page deploys this in one click.
+    APP_SECRET: <@generateRandomString(<32>)>
+
+services:
+  - hostname: app
+    type: nodejs@22
+    zeropsSetup: dev
+    buildFromGit: https://github.com/fxck/recipe-vibecoded-thin
+    enableSubdomainAccess: true
+    verticalAutoscaling:
+      minRam: 0.25
+
+  - hostname: db
+    type: postgresql@18
+    priority: 10
+    mode: NON_HA
+    verticalAutoscaling:
+      minRam: 0.25
